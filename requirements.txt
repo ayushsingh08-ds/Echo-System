@@ -1,5 +1,0 @@
-pandas
-numpy
-pymongo     # optional, only if you want Mongo push
-python-dateutil
-tqdm
