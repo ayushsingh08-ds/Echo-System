@@ -36,9 +36,11 @@
 ## Environment Variables
 
 Required:
+
 - `MONGO_URI`: MongoDB Atlas connection string (must be set in Render dashboard)
 
 Optional:
+
 - `MONGO_DB`: Database name (default: zeus_multi)
 - `TTL_SECONDS`: Time to live for metrics in seconds (default: 10800 = 3 hours)
 
@@ -79,6 +81,7 @@ gunicorn api:app -c gunicorn.conf.py
 ## Monitoring
 
 Check logs in Render dashboard:
+
 - Go to your service → Logs
 - Monitor for errors or warnings
 - TTL index warnings are non-critical for certain MongoDB tiers

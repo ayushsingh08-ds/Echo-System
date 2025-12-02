@@ -15,5 +15,5 @@ services:
       - key: TTL_SECONDS
         value: 10800
       - key: PYTHON_VERSION
-        value: 3.12.0
+        value: 3.12.8
     healthCheckPath: /health
