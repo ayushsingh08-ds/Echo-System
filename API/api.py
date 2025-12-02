@@ -167,20 +167,46 @@ def ingest():
 
     docs = []
     for s in samples:
-        ts = parse_timestamp(s.get("timestamp") if isinstance(s, dict) else None)
-        md = s.get("metadata", {}) if isinstance(s, dict) else {}
-        metrics = s.get("metrics", {}) if isinstance(s, dict) else {}
-        try:
-            gpu_id = int(md.get("gpu_id", 0)) if md.get("gpu_id", None) is not None else 0
-        except Exception:
-            gpu_id = 0
+        if not isinstance(s, dict):
+            continue
+            
+        ts = parse_timestamp(s.get("timestamp"))
+        
+        # Support both nested and flat structures
+        # If 'metadata' and 'metrics' exist, use nested structure
+        # Otherwise, extract from flat structure
+        if "metadata" in s and "metrics" in s:
+            # Nested structure
+            md = s.get("metadata", {})
+            metrics = s.get("metrics", {})
+            try:
+                gpu_id = int(md.get("gpu_id", 0)) if md.get("gpu_id", None) is not None else 0
+            except Exception:
+                gpu_id = 0
+            host = md.get("host", "unknown")
+            gpu_name = md.get("gpu_name")
+        else:
+            # Flat structure - extract metadata and metrics
+            try:
+                gpu_id = int(s.get("gpu_id", 0)) if s.get("gpu_id", None) is not None else 0
+            except Exception:
+                gpu_id = 0
+            host = s.get("host", "unknown")
+            gpu_name = s.get("gpu_name")
+            
+            # All non-metadata fields go into metrics
+            metrics = {
+                k: v for k, v in s.items() 
+                if k not in ["timestamp", "host", "gpu_id", "gpu_name", "metadata", "metrics"]
+            }
+        
         doc = {
             "timestamp": ts,
             "metadata": {
                 "client_id": client_id,
-                "host": md.get("host", "unknown"),
+                "host": host,
                 "gpu_id": gpu_id,
-                "gpu_name": md.get("gpu_name"),
+                "gpu_name": gpu_name,
             },
             "metrics": metrics,
         }
