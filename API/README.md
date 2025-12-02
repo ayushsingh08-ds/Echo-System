@@ -44,6 +44,37 @@ Optional:
 - `MONGO_DB`: Database name (default: zeus_multi)
 - `TTL_SECONDS`: Time to live for metrics in seconds (default: 10800 = 3 hours)
 
+## ⚠️ CRITICAL: MongoDB Atlas Network Access Setup
+
+**You MUST whitelist Render's IP addresses in MongoDB Atlas, or the connection will fail with SSL/TLS errors.**
+
+### Steps to Fix MongoDB Connection Issues:
+
+1. Go to [MongoDB Atlas Dashboard](https://cloud.mongodb.com/)
+2. Select your cluster → **Network Access** (left sidebar)
+3. Click **"Add IP Address"**
+4. Choose one of these options:
+
+   **Option A (Recommended for Development):**
+   - Click **"Allow Access from Anywhere"**
+   - This adds `0.0.0.0/0` (allows all IPs)
+   
+   **Option B (More Secure):**
+   - Add Render's IP ranges manually (check Render docs for current IPs)
+   - Or use Render's static IP (paid feature)
+
+5. Click **"Confirm"**
+6. Wait 1-2 minutes for changes to propagate
+7. Redeploy your Render service (or it will auto-redeploy)
+
+**Common Error Without IP Whitelist:**
+```
+SSL handshake failed: TLSV1_ALERT_INTERNAL_ERROR
+ServerSelectionTimeoutError: Timeout: 30.0s
+```
+
+This is NOT an SSL error - it's MongoDB Atlas blocking the connection!
+
 ## API Endpoints
 
 - `GET /health` - Health check endpoint

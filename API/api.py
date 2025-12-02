@@ -48,15 +48,15 @@ app = Flask(__name__)
 CORS(app)
 
 # --- Mongo client & collections ---
-# Configure MongoDB client with SSL/TLS settings for compatibility
+# Configure MongoDB client with minimal explicit settings
+# Let the connection URI handle most SSL/TLS configuration
 mongo = MongoClient(
     MONGO_URI,
-    tls=True,
-    tlsAllowInvalidCertificates=False,
     serverSelectionTimeoutMS=30000,
     connectTimeoutMS=30000,
-    retryWrites=True,
-    w='majority'
+    socketTimeoutMS=30000,
+    tlsAllowInvalidCertificates=True,
+    retryWrites=True
 )
 db = mongo[MONGO_DB]
 clients_col = db["clients"]
