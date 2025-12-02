@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: zeus-api
+    env: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn api:app -c gunicorn.conf.py
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB
+        value: zeus_multi
+      - key: TTL_SECONDS
+        value: 10800
+      - key: PYTHON_VERSION
+        value: 3.12.0
+    healthCheckPath: /health
