@@ -56,10 +56,12 @@ Optional:
 4. Choose one of these options:
 
    **Option A (Recommended for Development):**
+
    - Click **"Allow Access from Anywhere"**
    - This adds `0.0.0.0/0` (allows all IPs)
-   
+
    **Option B (More Secure):**
+
    - Add Render's IP ranges manually (check Render docs for current IPs)
    - Or use Render's static IP (paid feature)
 
@@ -68,6 +70,7 @@ Optional:
 7. Redeploy your Render service (or it will auto-redeploy)
 
 **Common Error Without IP Whitelist:**
+
 ```
 SSL handshake failed: TLSV1_ALERT_INTERNAL_ERROR
 ServerSelectionTimeoutError: Timeout: 30.0s
